@@ -35,7 +35,7 @@ func (bot *Bot) Connect() (conn net.Conn, err error) {
 	if err != nil {
 		log.Fatal("unable to connect to IRC server", err)
 	}
-	// wat
+
 	bot.conn = conn
 	log.Printf("Connected to IRC server %s (%s)\r\n", bot.server, bot.conn.RemoteAddr())
 	return bot.conn, nil
@@ -44,10 +44,9 @@ func (bot *Bot) Connect() (conn net.Conn, err error) {
 func main() {
 
 	ircbot := MakeBot()
-	// the _ seems everywhere. Is it another variable?
+
 	conn, _ := ircbot.Connect()
 	conn.Write([]byte("NICK " + ircbot.nick + "\r\n"))
-	// why the 8 * ?   Check IRC protocol
 	conn.Write([]byte("USER " + ircbot.user + " 8 * :" + ircbot.user + "\r\n"))
 	conn.Write([]byte("JOIN " + ircbot.channel + "\r\n"))
 	defer conn.Close()
@@ -77,16 +76,15 @@ func main() {
 				conn.Write([]byte("PRIVMSG #nearpdx :Welcome " + user + "!\r\n"))
 			}
 
-			// Handles IRC protocol and internals
 		} else if strings.Contains(line, "PING") {
 			conn.Write([]byte("PONG " + line[5:] + "\r\n"))
 		}
 
 		if err != nil {
 			fmt.Printf("%s", err)
-			break // break loop on errors
+			break
 		}
-		// Print lines
+
 		fmt.Printf("%s\n", line)
 	}
 }
